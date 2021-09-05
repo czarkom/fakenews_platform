@@ -19,7 +19,7 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
-    print(request.form)
+    print(request.data)
     return "dupa"
 
 
