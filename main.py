@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request
 import os
+import json
 from dotenv import load_dotenv
 from flask_mysqldb import MySQL
 from flask_cors import CORS
+from websiteParser import parse_website
 
 load_dotenv()
 
@@ -12,15 +14,11 @@ mysql = MySQL(app)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 
-@app.route('/')
-def index():
-    return render_template('home.html', template_folder="templates")
-
-
 @app.route('/search', methods=['POST'])
 def search():
-    print(request.data)
-    return "dupa"
+    request_data = request.get_json()
+    parse_website(request_data['url'])
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 
 if __name__ == "__main__":
