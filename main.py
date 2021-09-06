@@ -17,7 +17,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 @app.route('/search', methods=['POST'])
 def search():
     request_data = request.get_json()
-    parse_website(request_data['url'])
+    parse_website(request_data['url'], mysql)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 

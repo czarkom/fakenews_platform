@@ -6,7 +6,7 @@
       </div>
       <div class="flex">
         <div class="mx-2">
-          <input class="input" type="text" v-model="query" placeholder="https://fronda.pl/farmazon">
+          <input class="input" style="width: 400px !important;" type="text" v-model="query" placeholder="https://fronda.pl/farmazon">
         </div>
         <div class="mx-2">
           <div @click="submit" class="button">
