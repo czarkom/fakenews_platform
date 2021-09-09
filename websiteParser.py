@@ -1,49 +1,51 @@
 from bs4 import BeautifulSoup
 from urllib import request
 from requests_html import HTMLSession
+from threading import Thread
 
-# def parse_website_js(url):
-#     session = HTMLSession()
-#     r = session.get(url)
-#
-#     r.html.render(sleep=1, keep_page=True, scrolldown=1)
-#
-#     tags_dictionary = {}
-#     html = r.html
-#     soup = BeautifulSoup(html, 'html.parser')
-#     print(html)
-#     tag_array = ['div',
-#                  'h1',
-#                  'h2',
-#                  'iframe',
-#                  'a',
-#                  'span',
-#                  'i',
-#                  'button',
-#                  'input',
-#                  'form',
-#                  'meta',
-#                  'script',
-#                  'style',
-#                  'link']
-#     for tag in tag_array:
-#         soup_count = soup.find_all(tag)
-#         tags_dictionary[tag] = len(soup_count)
-#
-#     print(tags_dictionary)
+def parse_website_js(url):
+    session = HTMLSession()
+    r = session.get(url)
+    r.html.render(sleep=1, keep_page=True,scrolldown=10)
+    tags_dictionary = {}
+    html = r.html.raw_html
+    soup = BeautifulSoup(html, 'html.parser')
+    file = open("js.txt", "wb")
+    file.write(html)
+    tag_array = ['div',
+                 'h1',
+                 'h2',
+                 'iframe',
+                 'a',
+                 'span',
+                 'i',
+                 'button',
+                 'input',
+                 'form',
+                 'meta',
+                 'script',
+                 'style',
+                 'link']
+    for tag in tag_array:
+        soup_count = soup.find_all(tag)
+        tags_dictionary[tag] = len(soup_count)
+    session.close()
+    print(tags_dictionary)
 
 
 def parse_website(url, mysql):
     tags_dictionary = {}
     web_url = request.urlopen(url)
     html = web_url.read()
+    file = open("html.txt", "wb")
+    file.write(html)
     soup = BeautifulSoup(html, 'html.parser')
-    print(html)
     tag_array = ['div', 'h1', 'h2', 'iframe', 'a', 'span', 'i', 'button', 'input', 'form', 'meta', 'script', 'style', 'link']
     for tag in tag_array:
         soup_count = soup.find_all(tag)
         tags_dictionary[tag] = len(soup_count)
-    fill_database(url, tags_dictionary, mysql)
+    #fill_database(url, tags_dictionary, mysql)
+    web_url.close()
     print(tags_dictionary)
 
 
