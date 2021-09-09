@@ -1,10 +1,9 @@
 from bs4 import BeautifulSoup
 from urllib import request
-from requests_html import HTMLSession
-from threading import Thread
+from requests_html_custom import request_html
 
 def parse_website_js(url):
-    session = HTMLSession()
+    session = request_html.HTMLSession()
     r = session.get(url)
     r.html.render(sleep=1, keep_page=True,scrolldown=10)
     tags_dictionary = {}
