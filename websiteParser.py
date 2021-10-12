@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 from requests_html_custom import request_html
 import MySQLdb
 
@@ -6,10 +6,12 @@ import MySQLdb
 def parse_website_js(url, mysql):
     session = request_html.HTMLSession()
     r = session.get(url)
-    r.html.render(sleep=1, keep_page=True, scrolldown=10)
-    tags_dictionary = {}
+    r.html.render(sleep=1, keep_page=True, scrolldown=10, timeout=40)
+    webscrapping_results_dictionary = {}
     html = r.html.raw_html
     soup = BeautifulSoup(html, 'html.parser')
+    div_count = soup.div
+    webscrapping_results_dictionary['text_longer_than_100_characters_count'] = len(soup.find_all(string=is_the_only_string_within_a_tag))
     file = open("js.html", "wb")
     file.write(html)
     tag_array = ['div',
@@ -28,10 +30,10 @@ def parse_website_js(url, mysql):
                  'link']
     for tag in tag_array:
         soup_count = soup.find_all(tag)
-        tags_dictionary[tag] = len(soup_count)
+        webscrapping_results_dictionary[tag] = len(soup_count)
     session.close()
-    fill_database(url, tags_dictionary, mysql)
-    return tags_dictionary
+    fill_database(url, webscrapping_results_dictionary, mysql)
+    return webscrapping_results_dictionary
 
 
 def fill_database(url, result_dictionary, mysql):
@@ -54,3 +56,8 @@ def fill_database(url, result_dictionary, mysql):
     mysql.connection.commit()
 
     cursor.close()
+
+
+def is_the_only_string_within_a_tag(s):
+    """Return True if this string is the only child of its parent tag."""
+    return s == s.parent.string and type(s) is NavigableString and len(s) > 100

@@ -76,6 +76,7 @@ export default {
   },
   methods: {
     submit(){
+      this.websiteData = null;
       this.loading = true;
       axios.post('search', {
         url: this.query
