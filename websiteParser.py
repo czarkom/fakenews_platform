@@ -3,9 +3,9 @@ from requests_html_custom import request_html
 import MySQLdb
 import re
 import requests
-import json
 import time
 import traceback
+import random
 
 class YellowLabToolsError(Exception):
     """Base class for other exceptions"""
@@ -106,42 +106,42 @@ def parse_website_with_yellow_lab_tools(url, scrapping_results_dictionary):
         time.sleep(10)
         while True:
             r = requests.get(url=API_RUNS_ENDPOINT + f"/{initial_response['runId']}",
-                                            timeout=30).json()
+                             timeout=30).json()
             if r["status"]["statusCode"] == "complete":
                 break
             time.sleep(5)
         r = requests.get(url=API_RESULT_ENDPOINT + f"/{initial_response['runId']}",
-                                      timeout=30).json()
+                         timeout=30).json()
         ylt_request_success = True
     except Exception as e:
         print(f"Error occured during YellowLabTools data fetching without using using proxy:\n {traceback.format_exc()}"
               f"\nRequest status: {r.text}, request url: {r.url}\n")
 
     if not ylt_request_success:
-        with open("resources/http_proxies.txt", encoding="utf-8", mode="r") as f:
-            for proxy in f:
-                proxy_dict = {
-                    "https": "http://" + proxy.strip(),
-                    "http": "http://" + proxy.strip()
-                }
-                try:
-                    r = requests.post(url=API_RUNS_ENDPOINT, proxies=proxy_dict, data=data, timeout=30)
-                    initial_response = r.json()
-                    time.sleep(10)
-                    while True:
-                        r = requests.get(url=API_RUNS_ENDPOINT + f"/{initial_response['runId']}",
-                                                        proxies=proxy_dict, timeout=30).json()
-                        if r["status"]["statusCode"] == "complete":
-                            break
-                        time.sleep(5)
-                    r = requests.get(url=API_RESULT_ENDPOINT + f"/{initial_response['runId']}",
-                                                  proxies=proxy_dict, timeout=30).json()
-                    ylt_request_success = True
-                    break
-                except Exception as e:
-                    print(
-                        f"Error occured during YellowLabTools data fetching using proxy {proxy.strip()}:"
-                        f"\n{traceback.format_exc()}\n Request status: {r.text}\n")
+        for x in range(10):
+            proxy = random.choice(list(open('resources/http_proxies.txt'))).strip()
+            proxy_dict = {
+                "https": "http://" + proxy,
+                "http": "http://" + proxy
+            }
+            try:
+                r = requests.post(url=API_RUNS_ENDPOINT, proxies=proxy_dict, data=data, timeout=30)
+                initial_response = r.json()
+                time.sleep(10)
+                while True:
+                    r = requests.get(url=API_RUNS_ENDPOINT + f"/{initial_response['runId']}",
+                                                    proxies=proxy_dict, timeout=30).json()
+                    if r["status"]["statusCode"] == "complete":
+                        break
+                    time.sleep(5)
+                r = requests.get(url=API_RESULT_ENDPOINT + f"/{initial_response['runId']}",
+                                              proxies=proxy_dict, timeout=30).json()
+                ylt_request_success = True
+                break
+            except Exception as e:
+                print(
+                    f"Error occured during YellowLabTools data fetching using proxy {proxy}:"
+                    f"\n{traceback.format_exc()}\n Request status: {r.text}. Try no. {x}\n")
 
         if not ylt_request_success:
             raise YellowLabToolsError("Cannot analyse given Url with Yellow Lab Tools")
