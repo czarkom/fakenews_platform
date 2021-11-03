@@ -5,7 +5,11 @@ import re
 import requests
 import json
 import time
+import traceback
 
+class YellowLabToolsError(Exception):
+    """Base class for other exceptions"""
+    pass
 
 def parse_website_js(url):
     session = request_html.HTMLSession()
@@ -88,42 +92,79 @@ def fill_database(result_dictionary, cursor, connection):
 def parse_website_with_yellow_lab_tools(url, scrapping_results_dictionary):
     API_RUNS_ENDPOINT = "https://yellowlab.tools/api/runs"
     API_RESULT_ENDPOINT = "https://yellowlab.tools/api/results"
+
+    r = {}
     data = {
         "url": url
     }
-    proxy_dict = {
-        "https": "http://159.69.122.69:3128",
-        "http": "http://159.69.122.69:3128"
-    }
-    r = requests.post(url=API_RUNS_ENDPOINT, proxies=proxy_dict, data=data, timeout=30)
-    initial_response = r.json()
-    while(True):
-        running_response = \
-            requests.get(url=API_RUNS_ENDPOINT + f"/{initial_response['runId']}", proxies=proxy_dict, timeout=30).json()
-        if running_response["status"]["statusCode"] == "complete":
-            break
-        time.sleep(3)
-    final_response = requests.get(url=API_RESULT_ENDPOINT + f"/{initial_response['runId']}", proxies=proxy_dict, timeout=30).json()
 
-    scrapping_results_dictionary['ylt_DOMelementsCount'] = final_response['rules']['DOMelementsCount']['value']
-    scrapping_results_dictionary['ylt_DOMelementMaxDepth'] = final_response['rules']['DOMelementMaxDepth']['value']
-    scrapping_results_dictionary['ylt_scriptDuration'] = final_response['rules']['scriptDuration']['value']
-    scrapping_results_dictionary['ylt_jsErrors'] = final_response['rules']['jsErrors']['value']
-    scrapping_results_dictionary['ylt_cssColors'] = final_response['rules']['cssColors']['value']
+    ylt_request_success = False
+
+    try:
+        r = requests.post(url=API_RUNS_ENDPOINT, data=data, timeout=30)
+        initial_response = r.json()
+        time.sleep(10)
+        while True:
+            r = requests.get(url=API_RUNS_ENDPOINT + f"/{initial_response['runId']}",
+                                            timeout=30).json()
+            if r["status"]["statusCode"] == "complete":
+                break
+            time.sleep(5)
+        r = requests.get(url=API_RESULT_ENDPOINT + f"/{initial_response['runId']}",
+                                      timeout=30).json()
+        ylt_request_success = True
+    except Exception as e:
+        print(f"Error occured during YellowLabTools data fetching without using using proxy:\n {traceback.format_exc()}"
+              f"\nRequest status: {r.text}, request url: {r.url}\n")
+
+    if not ylt_request_success:
+        with open("resources/http_proxies.txt", encoding="utf-8", mode="r") as f:
+            for proxy in f:
+                proxy_dict = {
+                    "https": "http://" + proxy.strip(),
+                    "http": "http://" + proxy.strip()
+                }
+                try:
+                    r = requests.post(url=API_RUNS_ENDPOINT, proxies=proxy_dict, data=data, timeout=30)
+                    initial_response = r.json()
+                    time.sleep(10)
+                    while True:
+                        r = requests.get(url=API_RUNS_ENDPOINT + f"/{initial_response['runId']}",
+                                                        proxies=proxy_dict, timeout=30).json()
+                        if r["status"]["statusCode"] == "complete":
+                            break
+                        time.sleep(5)
+                    r = requests.get(url=API_RESULT_ENDPOINT + f"/{initial_response['runId']}",
+                                                  proxies=proxy_dict, timeout=30).json()
+                    ylt_request_success = True
+                    break
+                except Exception as e:
+                    print(
+                        f"Error occured during YellowLabTools data fetching using proxy {proxy.strip()}:"
+                        f"\n{traceback.format_exc()}\n Request status: {r.text}\n")
+
+        if not ylt_request_success:
+            raise YellowLabToolsError("Cannot analyse given Url with Yellow Lab Tools")
+
+    scrapping_results_dictionary['ylt_DOMelementsCount'] = r['rules']['DOMelementsCount']['value']
+    scrapping_results_dictionary['ylt_DOMelementMaxDepth'] = r['rules']['DOMelementMaxDepth']['value']
+    scrapping_results_dictionary['ylt_scriptDuration'] = r['rules']['scriptDuration']['value']
+    scrapping_results_dictionary['ylt_jsErrors'] = r['rules']['jsErrors']['value']
+    scrapping_results_dictionary['ylt_cssColors'] = r['rules']['cssColors']['value']
     scrapping_results_dictionary['ylt_cssDuplicatedProperties'] = \
-        final_response['rules']['cssDuplicatedProperties']['value']
-    scrapping_results_dictionary['ylt_totalWeight'] = final_response['rules']['totalWeight']['value']
-    scrapping_results_dictionary['ylt_domains'] = final_response['rules']['domains']['value']
-    scrapping_results_dictionary['ylt_compression'] = final_response['rules']['compression']['value']
-    scrapping_results_dictionary['ylt_totalRequests'] = final_response['rules']['totalRequests']['value']
-    scrapping_results_dictionary['ylt_heavyFonts'] = final_response['rules']['heavyFonts']['value']
-    scrapping_results_dictionary['ylt_global_score'] = final_response['scoreProfiles']['generic']['globalScore']
+        r['rules']['cssDuplicatedProperties']['value']
+    scrapping_results_dictionary['ylt_totalWeight'] = r['rules']['totalWeight']['value']
+    scrapping_results_dictionary['ylt_domains'] = r['rules']['domains']['value']
+    scrapping_results_dictionary['ylt_compression'] = r['rules']['compression']['value']
+    scrapping_results_dictionary['ylt_totalRequests'] = r['rules']['totalRequests']['value']
+    scrapping_results_dictionary['ylt_heavyFonts'] = r['rules']['heavyFonts']['value']
+    scrapping_results_dictionary['ylt_global_score'] = r['scoreProfiles']['generic']['globalScore']
     scrapping_results_dictionary['ylt_badJavascript_score'] = \
-        final_response['scoreProfiles']['generic']['categories']['badJavascript']['categoryScore']
+        r['scoreProfiles']['generic']['categories']['badJavascript']['categoryScore']
     scrapping_results_dictionary['ylt_jQuery_score'] = \
-        final_response['scoreProfiles']['generic']['categories']['jQuery']['categoryScore']
+        r['scoreProfiles']['generic']['categories']['jQuery']['categoryScore']
     scrapping_results_dictionary['ylt_serverConfig_score'] = \
-        final_response['scoreProfiles']['generic']['categories']['serverConfig']['categoryScore']
+        r['scoreProfiles']['generic']['categories']['serverConfig']['categoryScore']
 
 
 def get_cursor(mysql):
