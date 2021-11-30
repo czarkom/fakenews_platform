@@ -15,7 +15,7 @@ def get_cursor():
     return mydb.cursor(dictionary=True)
 
 
-with open('websites.txt', 'r') as websites_file:
+with open('resources/training_data/not_that_legit.txt', 'r') as websites_file:
     cursor = get_cursor()
     for line in websites_file:
         try:
