@@ -52,7 +52,6 @@ def parse_website_js(url):
     words_to_avoid_list = words_to_avoid_file.read().split(",")
     text_concat = text_from_html(soup, 25)
 
-    # text_concat = ' '.join(soup.find_all(string=is_the_only_within_tag_and_text_longer_than_25_characters))
     smart_words_count = sum(list(word in smart_words_list for word in text_concat.split()))
     words_to_avoid_count = sum(list(word in words_to_avoid_list for word in text_concat.split()))
     scrapping_results_dictionary['smart_words_count'] = smart_words_count
