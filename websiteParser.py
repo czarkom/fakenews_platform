@@ -207,26 +207,6 @@ def is_referencing_https(href):
     return href and re.compile("https://").search(href)
 
 
-def is_the_only_within_tag_and_text_longer_than_200_characters(s):
-    """Return True if this string is the only child of its parent tag."""
-    return s == s.parent.string and type(s) is NavigableString and len(s) > 200
-
-
-def is_the_only_within_tag_and_text_longer_than_150_characters(s):
-    """Return True if this string is the only child of its parent tag."""
-    return s == s.parent.string and type(s) is NavigableString and len(s) > 150
-
-
-def is_the_only_within_tag_and_text_longer_than_100_characters(s):
-    """Return True if this string is the only child of its parent tag."""
-    return s == s.parent.string and type(s) is NavigableString and len(s) > 100
-
-
-def is_the_only_within_tag_and_text_longer_than_50_characters(s):
-    """Return True if this string is the only child of its parent tag."""
-    return s == s.parent.string and type(s) is NavigableString and len(s) > 50
-
-
 def get_raw_html(url):
     session = request_html.HTMLSession()
     r = session.get(url)
@@ -247,7 +227,7 @@ def get_text_related_data(scrapping_results_dictionary, soup):
     smart_words_list = smart_words_file.read().split(",")
     words_to_avoid_list = words_to_avoid_file.read().split(",")
 
-    text_concat = text_from_html(soup, 25)
+    text_concat = text_from_html(soup, 30)
 
     smart_words_count = sum(list(word in smart_words_list for word in text_concat.split()))
     words_to_avoid_count = sum(list(word in words_to_avoid_list for word in text_concat.split()))
