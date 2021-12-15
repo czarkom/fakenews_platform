@@ -75,7 +75,7 @@
 }
 
 .modal {
-    @apply fixed z-50 bg-modal top-0 left-0 w-screen h-screen flex items-center justify-center;
+    @apply fixed z-50 bg-modal top-0 left-0 w-screen h-screen flex items-center justify-center mt-10;
 }
 
 .bg-modal{

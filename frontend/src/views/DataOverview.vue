@@ -98,12 +98,19 @@
       </div>
     </div>
     <div class="modal" v-if="websiteDataPreviewOpened">
-      <div class="rounded-lg overflow-hidden w-1/3">
-        <div class="bg-gray-300 p-4 font-semibold">
-          Url:
+      <div class="rounded-lg overflow-hidden w-3/4">
+        <div class="bg-gray-300 p-4 font-semibold text-center">
+          Detailed data scrapped from
+          <a :href="previewWebsiteData.url" target="_blank" class="hover:text-blue-700 italic">
+            {{ formatUrl(previewWebsiteData.url) }}
+          </a>
         </div>
         <div class="bg-white p-4">
-          {{ previewWebsiteData.url }}
+          <div class="grid grid-cols-3">
+            <div v-for="(column, index) in previewWebsiteDataToDisplay" :key="index">
+              {{ column }}: {{previewWebsiteData[column]}}
+            </div>
+          </div>
         </div>
         <div class="bg-gray-300 p-2 font-semibold text-right">
           <div class="button button-danger" @click="closeMessagePreview">Close</div>
@@ -132,7 +139,8 @@ export default {
         exclamation_count: undefined,
         smart_words_count: undefined,
         words_to_avoid_count: undefined
-      }
+      },
+      hiddenColumns: ['url', 'id']
     }
   },
   mounted() {
@@ -166,6 +174,9 @@ export default {
     },
     showSmartWordsOrderDesc() {
       return this.sortingOrder.smart_words_count === 'desc' || this.sortingOrder.smart_words_count === undefined
+    },
+    previewWebsiteDataToDisplay() {
+      return Object.keys(this.previewWebsiteData).filter(el => !this.hiddenColumns.includes(el))
     }
   },
   methods: {

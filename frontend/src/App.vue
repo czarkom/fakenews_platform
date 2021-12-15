@@ -6,7 +6,7 @@
            src="@/assets/resources/background.jpg">
     </div>
     <div class="sticky top-0 z-30">
-      <div class="flex top-0 bg-gray-400 w-full items-center relative z-30">
+      <div class="flex top-0 bg-gray-300 w-full items-center relative z-30">
         <div class="w-1/2 flex items-center mx-4 justify-center">
           <img src="@/assets/resources/fakenews_logo.png" class="h-12">
           <span class="font-bold text-xl">Fakenews platform</span>
