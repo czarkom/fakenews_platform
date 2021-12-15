@@ -61,7 +61,7 @@ import axios from 'axios';
 import 'load-awesome/css/ball-circus.css'
 
 export default {
-  name: 'Home',
+  name: 'websiteAnalyzer',
   components: {
   },
   data() {

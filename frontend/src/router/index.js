@@ -1,25 +1,31 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Statistics from '../views/Statistics'
+import WebsiteAnalyzer from '@/views/WebsiteAnalyzer.vue'
+import DataOverview from '@/views/DataOverview'
+import KnowledgeBase from "@/views/KnowledgeBase";
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/statistics',
-    name: 'Statistics',
-    component: Statistics
-  }
+    {
+        path: '/',
+        name: 'websiteAnalyzer',
+        component: WebsiteAnalyzer
+    },
+    {
+        path: '/dataOverview',
+        name: 'dataOverview',
+        component: DataOverview
+    },
+    {
+        path: '/knowledgeBase',
+        name: 'knowledgeBase',
+        component: KnowledgeBase
+    }
 ]
 
 const router = new VueRouter({
-  routes
+    routes
 })
 
 export default router

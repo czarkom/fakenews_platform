@@ -4,7 +4,7 @@
 @import '~@fortawesome/fontawesome-free/css/all.css';
 
 .nav-link {
-    @apply p-4 py-6 whitespace-nowrap text-center;
+    @apply p-4 py-2 my-4 whitespace-nowrap text-center;
 }
 
 .nav-link:hover, .nav-link.active:hover, .notification-link:hover, .notification-link.active:hover {
@@ -56,4 +56,20 @@
 
 .button-small {
     @apply rounded border px-3 py-1;
+}
+
+.table {
+    @apply w-full;
+}
+
+.table th, .table td {
+    @apply py-2;
+}
+
+.table th {
+    @apply font-semibold text-center border-b-2 border-gray-800;
+}
+
+.table td {
+    @apply border-b border-gray-400 text-center;
 }

@@ -23,5 +23,13 @@ def search():
     return json.dumps(website_stats), 200, {'ContentType': 'application/json'}
 
 
+@app.route('/data', methods=['GET'])
+def get_data():
+    cursor = get_cursor(mysql)
+    cursor.execute(''' SELECT * FROM websites''')
+    data = cursor.fetchall()
+    return json.dumps(data), 200, {'ContentType': 'application/json'}
+
+
 if __name__ == "__main__":
     app.run()
