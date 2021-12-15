@@ -1,96 +1,114 @@
 <template>
   <div>
-    <div class="text-xl text-gray-800 font-bold p-4">
-      Websites data overview
-    </div>
+    <div>
+      <div class="text-xl text-gray-800 font-bold p-4">
+        Websites data overview
+      </div>
 
-    <template v-if="websitesData">
-      <div class="mx-4 w-full">
-        <table class="table">
-          <thead>
-          <tr>
-            <th>
-              No.
-            </th>
-            <th>
-              Website url
-            </th>
-            <th>
-              <div class="flex justify-center">
-                <span>Exclamations</span>
-                <div class="ml-2 text-xl cursor-pointer flex flex-col">
-                  <i :class="{'invisible': !showExclamationsOrderAsc }" @click="sortDescending('exclamation_count')"
-                     class="-mb-3 fas fa-sort-up"></i>
-                  <i :class="{'invisible': !showExclamationsOrderDesc }" @click="sortAscending('exclamation_count')"
-                     class="-mt-1 fas fa-sort-down"></i>
+      <template v-if="websitesData">
+        <div class="mx-4 w-full">
+          <table class="table">
+            <thead>
+            <tr>
+              <th>
+                No.
+              </th>
+              <th>
+                Website url
+              </th>
+              <th>
+                <div class="flex justify-center">
+                  <span>Exclamations</span>
+                  <div class="ml-2 text-xl cursor-pointer flex flex-col">
+                    <i :class="{'invisible': !showExclamationsOrderAsc }" @click="sortDescending('exclamation_count')"
+                       class="-mb-3 fas fa-sort-up"></i>
+                    <i :class="{'invisible': !showExclamationsOrderDesc }" @click="sortAscending('exclamation_count')"
+                       class="-mt-1 fas fa-sort-down"></i>
+                  </div>
                 </div>
-              </div>
-            </th>
-            <th>
-              <div class="flex justify-center">
-                <span>Words to avoid</span>
-                <div class="ml-2 text-xl cursor-pointer flex flex-col">
-                  <i :class="{'invisible': !showWordsToAvoidOrderAsc }" @click="sortDescending('words_to_avoid_count')"
-                     class="-mb-3 fas fa-sort-up"></i>
-                  <i :class="{'invisible': !showWordsToAvoidOrderDesc }" @click="sortAscending('words_to_avoid_count')"
-                     class="-mt-1 fas fa-sort-down"></i>
+              </th>
+              <th>
+                <div class="flex justify-center">
+                  <span>Words to avoid</span>
+                  <div class="ml-2 text-xl cursor-pointer flex flex-col">
+                    <i :class="{'invisible': !showWordsToAvoidOrderAsc }"
+                       @click="sortDescending('words_to_avoid_count')"
+                       class="-mb-3 fas fa-sort-up"></i>
+                    <i :class="{'invisible': !showWordsToAvoidOrderDesc }"
+                       @click="sortAscending('words_to_avoid_count')"
+                       class="-mt-1 fas fa-sort-down"></i>
+                  </div>
                 </div>
-              </div>
-            </th>
-            <th>
-              <div class="flex justify-center">
-                <span>Smart words</span>
-                <div class="ml-2 text-xl cursor-pointer flex flex-col">
-                  <i :class="{'invisible': !showSmartWordsOrderAsc }" @click="sortDescending('smart_words_count')"
-                     class="-mb-3 fas fa-sort-up"></i>
-                  <i :class="{'invisible': !showSmartWordsOrderDesc }" @click="sortAscending('smart_words_count')"
-                     class="-mt-1 fas fa-sort-down"></i>
+              </th>
+              <th>
+                <div class="flex justify-center">
+                  <span>Smart words</span>
+                  <div class="ml-2 text-xl cursor-pointer flex flex-col">
+                    <i :class="{'invisible': !showSmartWordsOrderAsc }" @click="sortDescending('smart_words_count')"
+                       class="-mb-3 fas fa-sort-up"></i>
+                    <i :class="{'invisible': !showSmartWordsOrderDesc }" @click="sortAscending('smart_words_count')"
+                       class="-mt-1 fas fa-sort-down"></i>
+                  </div>
                 </div>
-              </div>
-            </th>
-            <th>
-              View details
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="(website, index) in websitesData" :key="index">
-            <td>{{ index + 1 }}.</td>
-            <td>
-              <a :href="website.url" target="_blank" class="hover:text-blue-700">
-                {{ formatUrl(website.url) }}
-              </a>
-            </td>
-            <td>{{ website.exclamation_count }}</td>
-            <td>{{ website.words_to_avoid_count }}</td>
-            <td>{{ website.smart_words_count }}</td>
-            <td class="w-36">
-              <div class="border-2 border-gray-600 bg-gray-200 rounded-xl cursor-pointer shadow-xl shadow-inner" @click="openWebsiteDataPreview(website)">
-                Open<i class="ml-2 fas fa-envelope-open-text"></i>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="m-8 p-12 rounded border-2 border-gray-500 text-gray-800" v-if="!websitesData.length">
-        No entries in databse
-      </div>
-    </template>
-    <template v-else-if="loading">
-      <div class="alert mt-10 ml-6">
-        <div class="text-xl flex items-center">
-          <div>
-            <i class="fas fa-spinner fa-pulse"></i>
-          </div>
-          <div class="ml-4">
-            Loading websites data
+              </th>
+              <th>
+                View details
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(website, index) in websitesData" :key="index">
+              <td>{{ index + 1 }}.</td>
+              <td>
+                <a :href="website.url" target="_blank" class="hover:text-blue-700">
+                  {{ formatUrl(website.url) }}
+                </a>
+              </td>
+              <td>{{ website.exclamation_count }}</td>
+              <td>{{ website.words_to_avoid_count }}</td>
+              <td>{{ website.smart_words_count }}</td>
+              <td class="w-36">
+                <div class="border-2 border-gray-600 bg-gray-200 rounded-xl cursor-pointer shadow-xl shadow-inner"
+                     @click="openWebsiteDataPreview(website)">
+                  Open<i class="ml-2 fas fa-envelope-open-text"></i>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="m-8 p-12 rounded border-2 border-gray-500 text-gray-800" v-if="!websitesData.length">
+          No entries in databse
+        </div>
+      </template>
+      <template v-else-if="loading">
+        <div class="alert mt-10 ml-6">
+          <div class="text-xl flex items-center">
+            <div>
+              <i class="fas fa-spinner fa-pulse"></i>
+            </div>
+            <div class="ml-4">
+              Loading websites data
+            </div>
           </div>
         </div>
+      </template>
+      <div v-else-if="error" class="m-8 p-12 rounded border-2 border-red-500 text-red-500">
+        Error occured during fetching data
       </div>
-    </template>
-    <div v-else-if="error" class="m-8 p-12 rounded border-2 border-red-500 text-red-500">
-      Error occured during fetching data
+    </div>
+    <div class="modal" v-if="websiteDataPreviewOpened">
+      <div class="rounded-lg overflow-hidden w-1/3">
+        <div class="bg-gray-300 p-4 font-semibold">
+          Url:
+        </div>
+        <div class="bg-white p-4">
+          {{ previewWebsiteData.url }}
+        </div>
+        <div class="bg-gray-300 p-2 font-semibold text-right">
+          <div class="button button-danger" @click="closeMessagePreview">Close</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -154,6 +172,9 @@ export default {
     openWebsiteDataPreview(website) {
       this.websiteDataPreviewOpened = true;
       this.previewWebsiteData = website;
+    },
+    closeMessagePreview() {
+      this.websiteDataPreviewOpened = false;
     },
     formatUrl(url) {
       if (url.length > 10) {
