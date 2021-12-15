@@ -4,7 +4,7 @@
 @import '~@fortawesome/fontawesome-free/css/all.css';
 
 .nav-link {
-    @apply p-4 py-2 my-4 whitespace-nowrap text-center;
+    @apply p-4 py-6 whitespace-nowrap text-center font-semibold;
 }
 
 .nav-link:hover, .nav-link.active:hover, .notification-link:hover, .notification-link.active:hover {
