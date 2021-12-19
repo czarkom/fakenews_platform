@@ -1,12 +1,36 @@
 <template>
   <div>
-    <div>
+    <div class="mx-4">
       <div class="text-xl text-gray-800 font-bold p-4">
         Websites data overview
       </div>
-
+      <div class="flex justify-center" v-if="websitesData">
+        <div class="w-full border-2 rounded-md border-gray-400 text-center text-gray-700">
+          <div class="bg-gray-200 rounded-t-md font-semibold text-gray-900 py-1 border-b-2 border-gray-400">
+            Choose columns to display (max 4)
+          </div>
+          <div class="flex">
+            <div class="mx-2 font-semibold">Chosen columns:</div>
+            <div v-for="(column, index) in chosenColumns" :key="index" class="font-semibold">
+              {{ column }}<span v-if="index !== (chosenColumns.length - 1)" class="mx-2">|</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 p-2">
+            <div v-for="column in columnNames" :key="column" class="text-left">
+              <label class="cursor-pointer">
+                 <input :value="column"
+                     type="checkbox"
+                     v-model="chosenColumns"
+                     :disabled="checkIfMaxChosen(column)"
+                     class="cursor-pointer">
+                 <span class="ml-2 text-sm">{{ column }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
       <template v-if="websitesData">
-        <div class="mx-4 w-full">
+        <div class="w-full">
           <table class="table">
             <thead>
             <tr>
@@ -16,37 +40,15 @@
               <th>
                 Website url
               </th>
-              <th>
+              <th v-for="(column, index) in chosenColumns" :key="index">
                 <div class="flex justify-center">
-                  <span>Exclamations</span>
+                  <span>{{ column }}</span>
                   <div class="ml-2 text-xl cursor-pointer flex flex-col">
-                    <i :class="{'invisible': !showExclamationsOrderAsc }" @click="sortDescending('exclamation_count')"
+                    <i :class="checkAscVisibility(column)"
+                       @click="sortDescending(column)"
                        class="-mb-3 fas fa-sort-up"></i>
-                    <i :class="{'invisible': !showExclamationsOrderDesc }" @click="sortAscending('exclamation_count')"
-                       class="-mt-1 fas fa-sort-down"></i>
-                  </div>
-                </div>
-              </th>
-              <th>
-                <div class="flex justify-center">
-                  <span>Words to avoid</span>
-                  <div class="ml-2 text-xl cursor-pointer flex flex-col">
-                    <i :class="{'invisible': !showWordsToAvoidOrderAsc }"
-                       @click="sortDescending('words_to_avoid_count')"
-                       class="-mb-3 fas fa-sort-up"></i>
-                    <i :class="{'invisible': !showWordsToAvoidOrderDesc }"
-                       @click="sortAscending('words_to_avoid_count')"
-                       class="-mt-1 fas fa-sort-down"></i>
-                  </div>
-                </div>
-              </th>
-              <th>
-                <div class="flex justify-center">
-                  <span>Smart words</span>
-                  <div class="ml-2 text-xl cursor-pointer flex flex-col">
-                    <i :class="{'invisible': !showSmartWordsOrderAsc }" @click="sortDescending('smart_words_count')"
-                       class="-mb-3 fas fa-sort-up"></i>
-                    <i :class="{'invisible': !showSmartWordsOrderDesc }" @click="sortAscending('smart_words_count')"
+                    <i :class="checkDescVisibility(column)"
+                       @click="sortAscending(column)"
                        class="-mt-1 fas fa-sort-down"></i>
                   </div>
                 </div>
@@ -59,14 +61,14 @@
             <tbody>
             <tr v-for="(website, index) in websitesData" :key="index">
               <td>{{ index + 1 }}.</td>
-              <td>
+              <td class="text-left">
                 <a :href="website.url" target="_blank" class="hover:text-blue-700">
                   {{ formatUrl(website.url) }}
                 </a>
               </td>
-              <td>{{ website.exclamation_count }}</td>
-              <td>{{ website.words_to_avoid_count }}</td>
-              <td>{{ website.smart_words_count }}</td>
+              <td v-for="column in chosenColumns" :key="column">
+                {{ website[column] }}
+              </td>
               <td class="w-36">
                 <div class="border-2 border-gray-600 bg-gray-200 rounded-xl cursor-pointer shadow-xl shadow-inner"
                      @click="openWebsiteDataPreview(website)">
@@ -108,7 +110,7 @@
         <div class="bg-white p-4">
           <div class="grid grid-cols-3">
             <div v-for="(column, index) in previewWebsiteDataToDisplay" :key="index">
-              {{ column }}: {{previewWebsiteData[column]}}
+              {{ column }}: {{ previewWebsiteData[column] }}
             </div>
           </div>
         </div>
@@ -135,12 +137,10 @@ export default {
       loading: false,
       websiteDataPreviewOpened: false,
       previewWebsiteData: null,
-      sortingOrder: {
-        exclamation_count: undefined,
-        smart_words_count: undefined,
-        words_to_avoid_count: undefined
-      },
-      hiddenColumns: ['url', 'id']
+      sortingOrder: {},
+      hiddenColumns: ['url', 'id'],
+      chosenColumns: ['exclamation_count', 'words_to_avoid_count', 'smart_words_count'],
+      columnNames: []
     }
   },
   mounted() {
@@ -148,6 +148,11 @@ export default {
     axios.get('data').then(
         response => {
           this.websitesData = response.data;
+          const columnNames = Object.keys(this.websitesData[0]).filter(el => !this.hiddenColumns.includes(el));
+          columnNames.forEach((col) => {
+            this.sortingOrder[col] = undefined;
+          });
+          this.columnNames = columnNames;
         },
         error => {
           this.error = error;
@@ -157,29 +162,20 @@ export default {
     )
   },
   computed: {
-    showExclamationsOrderAsc() {
-      return this.sortingOrder.exclamation_count === 'asc' || this.sortingOrder.exclamation_count === undefined
-    },
-    showExclamationsOrderDesc() {
-      return this.sortingOrder.exclamation_count === 'desc' || this.sortingOrder.exclamation_count === undefined
-    },
-    showWordsToAvoidOrderAsc() {
-      return this.sortingOrder.words_to_avoid_count === 'asc' || this.sortingOrder.words_to_avoid_count === undefined
-    },
-    showWordsToAvoidOrderDesc() {
-      return this.sortingOrder.words_to_avoid_count === 'desc' || this.sortingOrder.words_to_avoid_count === undefined
-    },
-    showSmartWordsOrderAsc() {
-      return this.sortingOrder.smart_words_count === 'asc' || this.sortingOrder.smart_words_count === undefined
-    },
-    showSmartWordsOrderDesc() {
-      return this.sortingOrder.smart_words_count === 'desc' || this.sortingOrder.smart_words_count === undefined
-    },
     previewWebsiteDataToDisplay() {
       return Object.keys(this.previewWebsiteData).filter(el => !this.hiddenColumns.includes(el))
     }
   },
   methods: {
+    checkAscVisibility(column) {
+      return this.sortingOrder[column] === 'asc' || this.sortingOrder[column] === undefined ? '' : 'invisible';
+    },
+    checkDescVisibility(column) {
+      return this.sortingOrder[column] === 'desc' || this.sortingOrder[column] === undefined ? '' : 'invisible';
+    },
+    checkIfMaxChosen(value) {
+      return this.chosenColumns.length === 4 && !(this.chosenColumns.includes(value));
+    },
     openWebsiteDataPreview(website) {
       this.websiteDataPreviewOpened = true;
       this.previewWebsiteData = website;
@@ -189,7 +185,7 @@ export default {
     },
     formatUrl(url) {
       if (url.length > 10) {
-        return (url.substring(0, 40) + "...");
+        return (url.substring(0, 30) + "...");
       } else {
         return url;
       }
