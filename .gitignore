@@ -246,7 +246,7 @@ dmypy.json
 cython_debug/
 
 # Database
-.csv
+websites.csv
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm
 
