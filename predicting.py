@@ -3,11 +3,15 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import websiteParser
 from tensorflow import keras
+from numpy import argmax
 
 def predictValue(url, path_to_model):
     input_data = websiteParser.parse_website_js(url)
     model = keras.models.load_model(path_to_model)
-    predicted_value = model.predict(input_data)
+    #jeżeli jest to modelem regresyjnym to tak:
+    #predicted_value = model.predict(X_test[0].reshape(-1, 1, 40))*5.
+    #jeżeli jest model klasyfikujący to tak:
+    predicted_value = argmax(model.predict(X[[2]]), axis=-1).astype('int')[0]
     return predicted_value
 
 def recalculateModel(path_to_model, cursor):
