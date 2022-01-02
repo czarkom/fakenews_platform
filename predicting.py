@@ -9,9 +9,9 @@ def predictValue(url, path_to_model):
     input_data = websiteParser.parse_website_js(url)
     model = keras.models.load_model(path_to_model)
     #jeżeli jest to modelem regresyjnym to tak:
-    #predicted_value = model.predict(X_test[0].reshape(-1, 1, 40))*5.
+    #predicted_value = model.predict(input_data.reshape(-1, 1, 40))*5.
     #jeżeli jest model klasyfikujący to tak:
-    predicted_value = argmax(model.predict(X[[2]]), axis=-1).astype('int')[0]
+    predicted_value = argmax(model.predict(input_data), axis=-1).astype('int')[0]
     return predicted_value
 
 def recalculateModel(path_to_model, cursor):
