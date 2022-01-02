@@ -1,4 +1,4 @@
-import numpy as np
+import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import websiteParser
@@ -7,11 +7,15 @@ from numpy import argmax
 
 def predictValue(url, path_to_model):
     input_data = websiteParser.parse_website_js(url)
+    df = pd.DataFrame.from_dict(input_data)
+    normalized_df=(df-df.min())/(df.max()-df.min())
+    normalized_df.describe()
+    input = normalized_df.values
     model = keras.models.load_model(path_to_model)
     #jeżeli jest to modelem regresyjnym to tak:
-    #predicted_value = model.predict(input_data.reshape(-1, 1, 40))*5.
+    #predicted_value = model.predict(input.reshape(-1, 1, 40))*5.
     #jeżeli jest model klasyfikujący to tak:
-    predicted_value = argmax(model.predict(input_data), axis=-1).astype('int')[0]
+    predicted_value = argmax(model.predict(input), axis=-1).astype('int')[0]
     return predicted_value
 
 def recalculateModel(path_to_model, cursor):
