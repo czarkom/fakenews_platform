@@ -9,20 +9,23 @@
           <div class="bg-gray-200 rounded-t-md font-semibold text-gray-900 py-1 border-b-2 border-gray-400">
             Choose columns to display (max 4)
           </div>
-          <div class="flex">
+          <div class="flex items-center my-2">
             <div class="mx-2 font-semibold">Chosen columns:</div>
             <div v-for="(column, index) in chosenColumns" :key="index" class="font-semibold">
-              {{ column }}<span v-if="index !== (chosenColumns.length - 1)" class="mx-2">|</span>
+              <div class="text-sm mx-2 rounded-xl p-1 px-2 border-gray-800 border-2 shadow bg-gray-200">
+                {{ column }}
+              </div>
             </div>
           </div>
           <div class="grid grid-cols-3 p-2">
             <div v-for="column in columnNames" :key="column" class="text-left">
-              <label class="cursor-pointer">
+              <label class="cursor-pointer" :class="{'cursor-not-allowed': checkIfMaxChosen(column)}">
                  <input :value="column"
                      type="checkbox"
                      v-model="chosenColumns"
                      :disabled="checkIfMaxChosen(column)"
-                     class="cursor-pointer">
+                     class="cursor-pointer"
+                     :class="{'cursor-not-allowed': checkIfMaxChosen(column)}">
                  <span class="ml-2 text-sm">{{ column }}</span>
               </label>
             </div>
@@ -63,7 +66,7 @@
               <td>{{ index + 1 }}.</td>
               <td class="text-left">
                 <a :href="website.url" target="_blank" class="hover:text-blue-700">
-                  {{ formatUrl(website.url) }}
+                  {{ formatUrl(website.url, 30) }}
                 </a>
               </td>
               <td v-for="column in chosenColumns" :key="column">
@@ -101,16 +104,17 @@
     </div>
     <div class="modal" v-if="websiteDataPreviewOpened">
       <div class="rounded-lg overflow-hidden w-3/4">
-        <div class="bg-gray-300 p-4 font-semibold text-center">
+        <div class="bg-gray-300 p-4 font-semibold text-center text-lg">
           Detailed data scrapped from
           <a :href="previewWebsiteData.url" target="_blank" class="hover:text-blue-700 italic">
-            {{ formatUrl(previewWebsiteData.url) }}
+            {{ formatUrl(previewWebsiteData.url, 50) }}
           </a>
         </div>
         <div class="bg-white p-4">
           <div class="grid grid-cols-3">
-            <div v-for="(column, index) in previewWebsiteDataToDisplay" :key="index">
-              {{ column }}: {{ previewWebsiteData[column] }}
+            <div v-for="(column, index) in previewWebsiteDataToDisplay" :key="index" class="text-sm">
+              <span class="font-semibold">{{ column }}: </span>
+              <span class="font-medium">{{ previewWebsiteData[column] }}</span>
             </div>
           </div>
         </div>
@@ -183,9 +187,9 @@ export default {
     closeMessagePreview() {
       this.websiteDataPreviewOpened = false;
     },
-    formatUrl(url) {
-      if (url.length > 10) {
-        return (url.substring(0, 30) + "...");
+    formatUrl(url, length) {
+      if (url.length > length) {
+        return (url.substring(0, length) + "...");
       } else {
         return url;
       }
