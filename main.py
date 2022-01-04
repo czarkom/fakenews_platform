@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from flask_mysqldb import MySQL
 from flask_cors import CORS
 from websiteParser import parse_website_js, fill_database, get_cursor
+import predicting as pd
 
 load_dotenv()
 
@@ -14,11 +15,11 @@ mysql = MySQL(app)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 
-@app.route('/search', methods=['POST'])
+@app.route('/analyze', methods=['POST'])
 def search():
     request_data = request.get_json()
-    website_stats = parse_website_js(request_data['url'])
-    fill_database(website_stats, get_cursor(mysql), mysql.connection)
+    website_stats = pd.predict_random(request_data['url'], 'models/acc70_binary')
+    # fill_database(website_stats, get_cursor(mysql), mysql.connection)
 
     return json.dumps(website_stats), 200, {'ContentType': 'application/json'}
 

@@ -4,31 +4,58 @@ import matplotlib.pyplot as plt
 import websiteParser
 from tensorflow import keras
 from numpy import argmax
+import json
+import random
 
-def predictValue(url, path_to_model):
+
+def predict_random(url, path_to_model):
+    f = open('mocked_result.json')
+    input_data = json.load(f)
+
+    input_data['rating'] = random.randint(100, 500)/100
+    return input_data
+
+
+def predict_from_mock(url, path_to_model):
+    f = open('mocked_result.json')
+    input_data = json.load(f)
+
+    input_data['rating'] = predict_value(input_data, path_to_model)
+    return input_data
+
+
+def predict_from_parser(url, path_to_model):
     input_data = websiteParser.parse_website_js(url)
-    df = pd.DataFrame.from_dict(input_data)
-    normalized_df=(df-df.min())/(df.max()-df.min())
+
+    input_data['rating'] = predict_value(input_data, path_to_model)
+    return input_data
+
+
+def predict_value(input_data, path_to_model):
+    df = pd.DataFrame([input_data])
+    normalized_df = (df - df.min()) / (df.max() - df.min())
     normalized_df.describe()
     input = normalized_df.values
     model = keras.models.load_model(path_to_model)
-    #jeżeli jest to modelem regresyjnym to tak:
-    #predicted_value = model.predict(input.reshape(-1, 1, 40))*5.
-    #jeżeli jest model klasyfikujący to tak:
+    # jeżeli jest to modelem regresyjnym to tak:
+    # predicted_value = model.predict(input.reshape(-1, 1, 40))*5.
+    # jeżeli jest model klasyfikujący to tak:
     predicted_value = argmax(model.predict(input), axis=-1).astype('int')[0]
     return predicted_value
 
-def recalculateModel(path_to_model, cursor):
+
+def recalculate_model(path_to_model, cursor):
     model = keras.models.load_model(path_to_model)
     cursor.execute("SELECT * FROM websites")
     dataset = cursor.fetchall()
-    X, y = dataset[:,:-1], dataset[:,-1] 
+    X, y = dataset[:, :-1], dataset[:, -1]
     history = model.fit(X, y, validation_split=0.33, epochs=150, batch_size=95)
-    #tutaj może jakiś log z dokładnością
+    # tutaj może jakiś log z dokładnością
     model.save(path_to_model)
     learningGraph(history)
 
-def learningGraph(history):
+
+def learning_graph(history):
     # na wypadek jakby były metryki dokładności
     # plt.plot(history.history['accuracy'])
     # plt.plot(history.history['val_accuracy'])

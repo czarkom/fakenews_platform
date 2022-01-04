@@ -78,7 +78,7 @@ export default {
     submit(){
       this.websiteData = null;
       this.loading = true;
-      axios.post('search', {
+      axios.post('analyze', {
         url: this.query
       }).then( response => {
         this.websiteData = response.data;
