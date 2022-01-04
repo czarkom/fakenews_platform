@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "tm_project",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,23 +9,27 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "axios": "^0.21.3",
+    "axios": "^0.24.0",
+    "chroma-js": "^2.1.2",
     "core-js": "^3.6.5",
     "load-awesome": "^1.1.0",
-    "postcss": "^8.3.6",
-    "vue": "^2.6.11",
-    "vue-router": "^3.5.2"
+    "mathjs": "^10.0.2",
+    "vue": "^3.0.0",
+    "vue-audio-visual": "^2.3.0",
+    "vue-router": "^4.0.12",
+    "vue3-circle-progress": "^1.0.7"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-router": "^4.5.13",
     "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "autoprefixer": "^9.8.8",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "tailwindcss": "^2.2.9",
-    "vue-template-compiler": "^2.6.11"
+    "eslint-plugin-vue": "^7.0.0",
+    "postcss": "^7.0.39",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
   },
   "eslintConfig": {
     "root": true,
@@ -33,13 +37,15 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
+      "plugin:vue/vue3-essential",
       "eslint:recommended"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+        "no-unused-vars": "off"
+    }
   },
   "browserslist": [
     "> 1%",

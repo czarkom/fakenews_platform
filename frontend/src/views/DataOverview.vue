@@ -7,7 +7,12 @@
       <div class="flex justify-center" v-if="websitesData">
         <div class="w-full border-2 rounded-md border-gray-400 text-center text-gray-700">
           <div class="bg-gray-200 rounded-t-md font-semibold text-gray-900 py-1 border-b-2 border-gray-400">
-            Choose columns to display (max 4)
+            <span>
+              Choose columns to display (max 4)
+            </span>
+            <span>
+              <i class="fas fa-filter"></i>
+            </span>
           </div>
           <div class="flex items-center my-2">
             <div class="mx-2 font-semibold">Chosen columns:</div>
@@ -41,7 +46,7 @@
                 No.
               </th>
               <th>
-                Website url
+                <i class="fas fa-link mr-2"></i>Website url
               </th>
               <th v-for="(column, index) in chosenColumns" :key="index">
                 <div class="flex justify-center">
@@ -57,7 +62,7 @@
                 </div>
               </th>
               <th>
-                View details
+                <i class="fas fa-info-circle mr-2"></i>View details
               </th>
             </tr>
             </thead>
@@ -104,11 +109,14 @@
     </div>
     <div class="modal" v-if="websiteDataPreviewOpened">
       <div class="rounded-lg overflow-hidden w-3/4">
-        <div class="bg-gray-300 p-4 font-semibold text-center text-lg">
+        <div class="bg-gray-300 p-4 font-semibold text-center text-lg flex justify-center">
           Detailed data scrapped from
-          <a :href="previewWebsiteData.url" target="_blank" class="hover:text-blue-700 italic">
-            {{ formatUrl(previewWebsiteData.url, 50) }}
-          </a>
+          <div class="hover:text-blue-700 italic ml-4 cursor-pointer">
+            <i class="fas fa-link mr-1"></i>
+            <a :href="previewWebsiteData.url" target="_blank">
+              {{ formatUrl(previewWebsiteData.url, 50) }}
+            </a>
+          </div>
         </div>
         <div class="bg-white p-4">
           <div class="grid grid-cols-3">

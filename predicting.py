@@ -1,3 +1,5 @@
+import time
+
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -9,6 +11,7 @@ import random
 
 
 def predict_random(url, path_to_model):
+    time.sleep(5)
     f = open('mocked_result.json')
     input_data = json.load(f)
 

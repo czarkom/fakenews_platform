@@ -1,10 +1,8 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter } from "vue-router";
 import WebsiteAnalyzer from '@/views/WebsiteAnalyzer.vue'
 import DataOverview from '@/views/DataOverview'
 import KnowledgeBase from "@/views/KnowledgeBase";
-
-Vue.use(VueRouter)
+import { createWebHashHistory } from 'vue-router';
 
 const routes = [
     {
@@ -24,8 +22,7 @@ const routes = [
     }
 ]
 
-const router = new VueRouter({
+export default createRouter({
+    history: createWebHashHistory(),
     routes
 })
-
-export default router

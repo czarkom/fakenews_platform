@@ -12,9 +12,17 @@
           <span class="font-bold text-xl">Fakenews platform</span>
         </div>
         <div class="w-1/2 flex justify-between">
-          <router-link :to="{name: 'websiteAnalyzer'}" class="nav-link w-1/3">Website analyser</router-link>
-          <router-link :to="{name: 'dataOverview'}" class="nav-link w-1/3">Data overview</router-link>
-          <router-link :to="{name: 'knowledgeBase'}" class="nav-link w-1/3">Knowledge base</router-link>
+          <router-link :to="{name: 'websiteAnalyzer'}" class="nav-link w-1/3">
+            <i class="fas fa-microscope mr-2"></i>Website analyser
+          </router-link>
+          <div class="nav-link w-1/3 border-r-2 border-gray-400 border-l-2">
+            <router-link :to="{name: 'dataOverview'}" class="w-full text-center">
+              <i class="fas fa-database mr-2"></i>Data overview
+            </router-link>
+          </div>
+          <router-link :to="{name: 'knowledgeBase'}" class="nav-link w-1/3">
+            <i class="fas fa-atlas mr-2"></i>Knowledge base
+          </router-link>
         </div>
       </div>
     </div>
