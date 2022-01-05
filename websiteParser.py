@@ -81,12 +81,12 @@ def fill_database(result_dictionary, cursor, connection):
     cursor.execute(insert_statement,
                    (result_dictionary['url'], result_dictionary['exclamation_count'],
                     result_dictionary['words_to_avoid_count'], result_dictionary['smart_words_count'],
-                    result_dictionary['h1'], result_dictionary['h2'], result_dictionary['div'],
-                    result_dictionary['iframe'], result_dictionary['a'], result_dictionary['img'],
-                    result_dictionary['p'], result_dictionary['span'],
-                    result_dictionary['button'], result_dictionary['input'], result_dictionary['form'],
-                    result_dictionary['script'], result_dictionary['meta'], result_dictionary['link'],
-                    result_dictionary['style'], result_dictionary['text_longer_than_50_characters_count'],
+                    result_dictionary['h1_count'], result_dictionary['h2_count'], result_dictionary['div_count'],
+                    result_dictionary['iframe_count'], result_dictionary['a_count'], result_dictionary['img_count'],
+                    result_dictionary['p_count'], result_dictionary['span_count'],
+                    result_dictionary['button_count'], result_dictionary['input_count'], result_dictionary['form_count'],
+                    result_dictionary['script_count'], result_dictionary['meta_count'], result_dictionary['link_count'],
+                    result_dictionary['style_count'], result_dictionary['text_longer_than_50_characters_count'],
                     result_dictionary['text_longer_than_100_characters_count'],
                     result_dictionary['text_longer_than_150_characters_count'],
                     result_dictionary['text_longer_than_200_characters_count'],
@@ -271,7 +271,8 @@ def get_tag_counts_data(scrapping_results_dictionary, soup):
                  'link']
     for tag in tag_array:
         soup_count = soup.find_all(tag)
-        scrapping_results_dictionary[tag] = len(soup_count)
+        column_name = tag + "_count"
+        scrapping_results_dictionary[column_name] = len(soup_count)
 
 
 def get_total_code_length_data(scrapping_results_dictionary, html):
