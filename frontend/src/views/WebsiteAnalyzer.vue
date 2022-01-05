@@ -1,7 +1,7 @@
 <template>
   <div :style="{'background-image' : 'url(../assets/resources/background.jpg)'}"
        class="my-4 flex flex-col items-center">
-    <div class="w-full flex justify-center text-3xl font-semibold my-4">
+    <div class="w-full flex justify-center text-3xl font-semibold my-8">
       Enter your URL for analysis
     </div>
     <div class="flex">
@@ -78,7 +78,7 @@
           </div>
         </div>
         <div class="grid grid-cols-3" v-if="statistics">
-          <div v-for="(value, name) in filteredWebsiteData" :key="name" class="text-sm">
+          <div v-for="(value, name) in filteredWebsiteData" :key="name" class="text-sm my-1">
             <div v-if="!['url','rating'].includes(name)">
               <span class="font-semibold">{{ name }}: </span>
               <span class="font-medium">{{ value }}</span>
@@ -160,7 +160,6 @@ export default {
       }
     },
     calculateArrowColor(column) {
-      console.log(column)
       for(let step = 0; step < 12; step++){
         if (this.websiteData[column] >= this.statistics[column][PERCENTAGES[step]]
             && this.websiteData[column] < this.statistics[column][PERCENTAGES[step + 1]]) {
@@ -169,7 +168,6 @@ export default {
       }
     },
     isArrowUp(column) {
-      console.log(column)
       return this.websiteData[column] >= this.statistics[column]['50%'];
     }
   }

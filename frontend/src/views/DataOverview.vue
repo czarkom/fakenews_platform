@@ -108,8 +108,8 @@
       </div>
     </div>
     <div class="modal" v-if="websiteDataPreviewOpened">
-      <div class="rounded-lg overflow-hidden w-3/4">
-        <div class="bg-gray-300 p-4 font-semibold text-center text-lg flex justify-center">
+      <div class="rounded-lg overflow-hidden w-3/4 bg-gray-300">
+        <div class="p-4 font-semibold text-center text-lg flex justify-center">
           Detailed data scrapped from
           <div class="hover:text-blue-700 italic ml-4 cursor-pointer">
             <i class="fas fa-link mr-1"></i>
@@ -118,11 +118,36 @@
             </a>
           </div>
         </div>
+        <div class="mt-2 flex items-center mb-4 ml-4">
+          <div class="font-semibold mr-4">
+            Legend:
+          </div>
+          <div class="flex font-semibold items-center ml-2">
+            <div class="mx-4 flex">
+              <i class="fas fa-long-arrow-alt-up" style="color: #3690c0"></i>
+              <i class="fas fa-long-arrow-alt-down" style="color:#045a8d"></i>
+            </div>
+            <div class="mr-1 text-xs">
+              Near median
+            </div>
+            <img src="@/assets/resources/colorscale.png" class="h-6">
+            <div class="ml-1 text-xs">
+              Far from median
+            </div>
+          </div>
+        </div>
         <div class="bg-white p-4">
           <div class="grid grid-cols-3">
-            <div v-for="(column, index) in previewWebsiteDataToDisplay" :key="index" class="text-sm">
+            <div v-for="(column, index) in previewWebsiteDataToDisplay" :key="index" class="text-sm my-1">
               <span class="font-semibold">{{ column }}: </span>
               <span class="font-medium">{{ previewWebsiteData[column] }}</span>
+              <i class="fas fa-long-arrow-alt-up ml-2"
+                 v-if="isArrowUp(column)"
+                 :style="{ color: calculateArrowColor(column) }"></i>
+              <i class="fas fa-long-arrow-alt-down ml-2"
+                 v-if="!isArrowUp(column)"
+                 :style="{ color: calculateArrowColor(column) }"></i>
+              <span class="ml-4">(Median: {{statistics[column]['50%']}})</span>
             </div>
           </div>
         </div>
@@ -138,6 +163,7 @@
 // @ is an alias to /src
 import axios from 'axios';
 import 'load-awesome/css/ball-circus.css'
+import {PERCENTAGES, COLORSCALE} from "@/assets/resources/colorscale";
 
 export default {
   name: 'dataOverview',
@@ -150,16 +176,18 @@ export default {
       websiteDataPreviewOpened: false,
       previewWebsiteData: null,
       sortingOrder: {},
-      hiddenColumns: ['url', 'id'],
+      hiddenColumns: ['url', 'id','binary_rating'],
       chosenColumns: ['exclamation_count', 'words_to_avoid_count', 'smart_words_count'],
-      columnNames: []
+      columnNames: [],
+      statistics: null
     }
   },
   mounted() {
     this.loading = true
     axios.get('data').then(
         response => {
-          this.websitesData = response.data;
+          this.websitesData = response.data['db_data'];
+          this.statistics = JSON.parse(response.data['statistics'])
           const columnNames = Object.keys(this.websitesData[0]).filter(el => !this.hiddenColumns.includes(el));
           columnNames.forEach((col) => {
             this.sortingOrder[col] = undefined;
@@ -233,6 +261,17 @@ export default {
         return 0;
       });
     },
+    calculateArrowColor(column) {
+      for(let step = 0; step < 12; step++){
+        if (this.previewWebsiteData[column] >= this.statistics[column][PERCENTAGES[step]]
+            && this.previewWebsiteData[column] < this.statistics[column][PERCENTAGES[step + 1]]) {
+          return COLORSCALE[step];
+        }
+      }
+    },
+    isArrowUp(column) {
+      return this.previewWebsiteData[column] >= this.statistics[column]['50%'];
+    }
   }
 }
 </script>

@@ -30,7 +30,7 @@ def search():
 def get_data():
     cursor = get_cursor(mysql)
     cursor.execute(''' SELECT * FROM websites''')
-    data = cursor.fetchall()
+    data = {'db_data': list(cursor.fetchall()), 'statistics': get_stats()}
     return json.dumps(data), 200, {'ContentType': 'application/json'}
 
 
