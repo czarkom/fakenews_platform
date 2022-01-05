@@ -262,7 +262,6 @@ def get_tag_counts_data(scrapping_results_dictionary, soup):
                  'a',
                  'img',
                  'span',
-                 'i',
                  'button',
                  'input',
                  'form',

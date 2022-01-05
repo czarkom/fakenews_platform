@@ -59,13 +59,36 @@
         </div>
       </div>
       <div class="m-2">
-        <div class="p-4">
-          <div class="grid grid-cols-3">
-            <div v-for="(value, name) in filteredWebsiteData" :key="name" class="text-sm">
-              <div v-if="!['url','rating'].includes(name)">
-                <span class="font-semibold">{{ name }}: </span>
-                <span class="font-medium">{{ value }}</span>
-              </div>
+        <div class="mt-2 flex items-center mb-4">
+          <div class="font-semibold mr-4">
+            Legend:
+          </div>
+          <div class="flex font-semibold items-center ml-2">
+            <div class="mx-4 flex">
+              <i class="fas fa-long-arrow-alt-up" style="color: #3690c0"></i>
+              <i class="fas fa-long-arrow-alt-down" style="color:#045a8d"></i>
+            </div>
+            <div class="mr-1 text-xs">
+              Near median
+            </div>
+            <img src="@/assets/resources/colorscale.png" class="h-6">
+            <div class="ml-1 text-xs">
+              Far from median
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3" v-if="statistics">
+          <div v-for="(value, name) in filteredWebsiteData" :key="name" class="text-sm">
+            <div v-if="!['url','rating'].includes(name)">
+              <span class="font-semibold">{{ name }}: </span>
+              <span class="font-medium">{{ value }}</span>
+              <i class="fas fa-long-arrow-alt-up ml-2"
+                 v-if="isArrowUp(name)"
+                 :style="{ color: calculateArrowColor(name) }"></i>
+              <i class="fas fa-long-arrow-alt-down ml-2"
+                 v-if="!isArrowUp(name)"
+                 :style="{ color: calculateArrowColor(name) }"></i>
+              <span class="ml-4">(Median: {{statistics[name]['50%']}})</span>
             </div>
           </div>
         </div>
@@ -82,6 +105,7 @@ import {nextTick} from "vue";
 import "vue3-circle-progress/dist/circle-progress.css";
 import CircleProgress from "vue3-circle-progress";
 import {RATING_WORDS} from "@/assets/resources/rating_words"
+import {COLORSCALE, PERCENTAGES} from "@/assets/resources/colorscale";
 
 export default {
   name: 'websiteAnalyzer',
@@ -135,6 +159,19 @@ export default {
         return url;
       }
     },
+    calculateArrowColor(column) {
+      console.log(column)
+      for(let step = 0; step < 12; step++){
+        if (this.websiteData[column] >= this.statistics[column][PERCENTAGES[step]]
+            && this.websiteData[column] < this.statistics[column][PERCENTAGES[step + 1]]) {
+          return COLORSCALE[step];
+        }
+      }
+    },
+    isArrowUp(column) {
+      console.log(column)
+      return this.websiteData[column] >= this.statistics[column]['50%'];
+    }
   }
 }
 </script>
