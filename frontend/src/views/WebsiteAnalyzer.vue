@@ -42,7 +42,7 @@
                         :fill-color="description.color"
                         class="font-semibold text-lg"
         />
-        <div class="p-2 mx-2 text-2xl font-extrabold" style="-webkit-text-stroke: 1px black;"
+        <div class="p-2 mx-2 text-3xl font-extrabold" style="-webkit-text-stroke: 1px black;"
              :style="{ color: description.color }">
           {{ description.text }}
         </div>
@@ -83,11 +83,13 @@
               <span class="font-semibold">{{ name }}: </span>
               <span class="font-medium">{{ value }}</span>
               <i class="fas fa-long-arrow-alt-up ml-2"
-                 v-if="isArrowUp(name)"
+                 v-if="getArrowDirection(name) === 'up'"
                  :style="{ color: calculateArrowColor(name) }"></i>
               <i class="fas fa-long-arrow-alt-down ml-2"
-                 v-if="!isArrowUp(name)"
+                 v-if="getArrowDirection(name) === 'down'"
                  :style="{ color: calculateArrowColor(name) }"></i>
+              <i class="fas fa-equals ml-2"
+                 v-if="getArrowDirection(name) === 'even'"></i>
               <span class="ml-4">(Median: {{statistics[name]['50%']}})</span>
             </div>
           </div>
@@ -105,7 +107,6 @@ import {nextTick} from "vue";
 import "vue3-circle-progress/dist/circle-progress.css";
 import CircleProgress from "vue3-circle-progress";
 import {RATING_WORDS} from "@/assets/resources/rating_words"
-import {COLORSCALE, PERCENTAGES} from "@/assets/resources/colorscale";
 
 export default {
   name: 'websiteAnalyzer',
@@ -160,15 +161,10 @@ export default {
       }
     },
     calculateArrowColor(column) {
-      for(let step = 0; step < 12; step++){
-        if (this.websiteData[column] >= this.statistics[column][PERCENTAGES[step]]
-            && this.websiteData[column] < this.statistics[column][PERCENTAGES[step + 1]]) {
-          return COLORSCALE[step];
-        }
-      }
+      return this.calculateArrowColorUtil(column, this.websiteData, this.statistics)
     },
-    isArrowUp(column) {
-      return this.websiteData[column] >= this.statistics[column]['50%'];
+    getArrowDirection(column) {
+      return this.getArrowDirectionUtil(column, this.websiteData, this.statistics)
     }
   }
 }

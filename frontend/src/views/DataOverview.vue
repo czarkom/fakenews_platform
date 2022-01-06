@@ -142,11 +142,13 @@
               <span class="font-semibold">{{ column }}: </span>
               <span class="font-medium">{{ previewWebsiteData[column] }}</span>
               <i class="fas fa-long-arrow-alt-up ml-2"
-                 v-if="isArrowUp(column)"
+                 v-if="getArrowDirection(column) === 'up'"
                  :style="{ color: calculateArrowColor(column) }"></i>
               <i class="fas fa-long-arrow-alt-down ml-2"
-                 v-if="!isArrowUp(column)"
+                 v-if="getArrowDirection(column) === 'down'"
                  :style="{ color: calculateArrowColor(column) }"></i>
+              <i class="fas fa-equals ml-2"
+                 v-if="getArrowDirection(column) === 'even'"></i>
               <span class="ml-4">(Median: {{statistics[column]['50%']}})</span>
             </div>
           </div>
@@ -163,7 +165,6 @@
 // @ is an alias to /src
 import axios from 'axios';
 import 'load-awesome/css/ball-circus.css'
-import {PERCENTAGES, COLORSCALE} from "@/assets/resources/colorscale";
 
 export default {
   name: 'dataOverview',
@@ -262,15 +263,10 @@ export default {
       });
     },
     calculateArrowColor(column) {
-      for(let step = 0; step < 12; step++){
-        if (this.previewWebsiteData[column] >= this.statistics[column][PERCENTAGES[step]]
-            && this.previewWebsiteData[column] < this.statistics[column][PERCENTAGES[step + 1]]) {
-          return COLORSCALE[step];
-        }
-      }
+      return this.calculateArrowColorUtil(column, this.previewWebsiteData, this.statistics)
     },
-    isArrowUp(column) {
-      return this.previewWebsiteData[column] >= this.statistics[column]['50%'];
+    getArrowDirection(column) {
+      return this.getArrowDirectionUtil(column, this.previewWebsiteData, this.statistics)
     }
   }
 }

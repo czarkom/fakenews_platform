@@ -28,3 +28,20 @@ export const PERCENTAGES = [
     "91.7%",
     "100%"
 ]
+
+export function getArrowDirectionUtil(column, websiteData, statistics) {
+    if (websiteData[column] > statistics[column]['50%']){
+        return 'up'
+    } else if (websiteData[column] < statistics[column]['50%']){
+        return 'down'
+    } else return 'even';
+}
+
+export function calculateArrowColorUtil(column, websiteData, statistics) {
+    for (let step = 0; step < 12; step++) {
+        if (websiteData[column] >= statistics[column][PERCENTAGES[step]]
+            && websiteData[column] < statistics[column][PERCENTAGES[step + 1]]) {
+            return COLORSCALE[step];
+        }
+    }
+}
