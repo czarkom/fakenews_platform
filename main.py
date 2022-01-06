@@ -20,7 +20,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 @app.route('/analyze', methods=['POST'])
 def search():
     request_data = request.get_json()
-    website_stats = pd.predict_random(request_data['url'], 'models/acc70_binary')
+    website_stats = pd.predict_random(request_data['url'], 'models/regression_1s')
     # fill_database(website_stats, get_cursor(mysql), mysql.connection)
     website_stats['statistics'] = get_stats()
     return json.dumps(website_stats), 200, {'ContentType': 'application/json'}

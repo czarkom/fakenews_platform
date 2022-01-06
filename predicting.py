@@ -22,15 +22,16 @@ def predict_random(url, path_to_model):
 def predict_from_mock(url, path_to_model):
     f = open('mocked_result.json')
     input_data = json.load(f)
-    input_data.pop('url')
-    input_data['rating'] = predict_value(input_data, path_to_model)
+    input_data_copy = input_data.copy()
+    input_data_copy.pop("url")
+    input_data['rating'] = predict_value_regression(input_data_copy, path_to_model)
     return input_data
 
 
 def predict_from_parser(url, path_to_model):
     input_data = websiteParser.parse_website_js(url)
     input_data.pop('url')
-    input_data['rating'] = predict_value(input_data, path_to_model)
+    input_data['rating'] = predict_value_binary(input_data, path_to_model)
     return input_data
 
 
@@ -42,13 +43,14 @@ def predict_value_binary(input_data, path_to_model):
     predicted_value = argmax(model.predict(input), axis=-1).astype('int')[0]
     return predicted_value
 
+
 def predict_value_regression(input_data, path_to_model):
     df = pd.DataFrame([input_data])
     normalized_df = (df) / float(df.max(axis=1))
     input = normalized_df.values
     model = keras.models.load_model(path_to_model)
     predicted_value = model.predict(input.reshape(-1, 1, 40))*5.
-    return predicted_value[0][0]
+    return str(predicted_value[0][0])
 
 
 def recalculate_model(path_to_model, cursor):
