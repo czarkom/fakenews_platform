@@ -22,7 +22,7 @@ def search():
     request_data = request.get_json()
     website_stats = pd.predict_random(request_data['url'], 'models/regression_1s')
     # fill_database(website_stats, get_cursor(mysql), mysql.connection)
-    website_stats['statistics'] = get_stats()
+    website_stats['statistics'] = get_stats_json()
     return json.dumps(website_stats), 200, {'ContentType': 'application/json'}
 
 
@@ -30,11 +30,16 @@ def search():
 def get_data():
     cursor = get_cursor(mysql)
     cursor.execute(''' SELECT * FROM websites''')
-    data = {'db_data': list(cursor.fetchall()), 'statistics': get_stats()}
+    data = {'db_data': list(cursor.fetchall()), 'statistics': get_stats_json()}
     return json.dumps(data), 200, {'ContentType': 'application/json'}
 
 
-def get_stats():
+@app.route('/statistics', methods=['GET'])
+def get_statistics():
+    return json.dumps(get_stats_json()), 200, {'ContentType': 'application/json'}
+
+
+def get_stats_json():
     cursor = get_cursor(mysql)
     cursor.execute(''' SELECT * FROM websites''')
     data = list(cursor.fetchall())

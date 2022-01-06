@@ -3,6 +3,7 @@ import WebsiteAnalyzer from '@/views/WebsiteAnalyzer.vue'
 import DataOverview from '@/views/DataOverview'
 import KnowledgeBase from "@/views/KnowledgeBase";
 import { createWebHashHistory } from 'vue-router';
+import Statistics from "@/views/Statistics";
 
 const routes = [
     {
@@ -14,6 +15,11 @@ const routes = [
         path: '/dataOverview',
         name: 'dataOverview',
         component: DataOverview
+    },
+    {
+        path: '/statistics',
+        name: 'statistics',
+        component: Statistics
     },
     {
         path: '/knowledgeBase',

@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="ml-4">
     <div class="mx-4">
-      <div class="text-xl text-gray-800 font-bold p-4">
+      <div class="text-xl text-gray-800 font-bold my-4">
         Websites data overview
       </div>
       <div class="flex justify-center" v-if="websitesData">

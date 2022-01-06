@@ -1,6 +1,6 @@
 <template>
   <div :style="{'background-image' : 'url(../assets/resources/background.jpg)'}"
-       class="my-4 flex flex-col items-center">
+       class="my-4 flex flex-col items-center ml-4">
     <div class="w-full flex justify-center text-3xl font-semibold my-8">
       Enter your URL for analysis
     </div>
