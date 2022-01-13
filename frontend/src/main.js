@@ -4,7 +4,7 @@ import '@/assets/css/tailwind.css'
 import axios from "axios";
 import "vue3-circle-progress/dist/circle-progress.css";
 import App from './App.vue'
-import {calculateArrowColorUtil, getArrowDirectionUtil} from "@/assets/resources/colorscale";
+import {calculateArrowColorUtil, getArrowDirectionUtil} from "@/assets/utils/colorscale";
 
 // Vue.config.productionTip = false
 // console.log(process.env.VUE_APP_BASE_URL);

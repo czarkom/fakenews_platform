@@ -2,7 +2,7 @@
   <div :style="{'background-image' : 'url(../assets/resources/background.jpg)'}"
        class="my-4 flex flex-col items-center ml-4">
     <div class="w-full flex justify-center text-3xl font-semibold my-8">
-      Enter your URL for analysis
+      Wpisz adres URL wybranej strony
     </div>
     <div class="flex">
       <div class="mx-2">
@@ -31,7 +31,7 @@
     <div class="w-11/12 border-2 rounded my-8 border-gray-400 p-4" v-if="websiteData">
       <div class="flex items-center justify-center py-4">
         <div class="font-semibold text-xl p-2 mr-8">
-          Rating of your website:
+          Ocena Twojej strony:
         </div>
         <CircleProgress :percent="percent"
                         :show-percent="true"
@@ -49,7 +49,7 @@
       </div>
       <div class="flex items-center justify-center border-b-2 mx-2 border-gray-400">
         <div class="p-4 font-semibold text-center text-lg flex">
-          Detailed data scrapped from
+          Szczegółowe dane pozyskane ze strony:
           <div class="hover:text-blue-700 italic ml-4 cursor-pointer">
             <i class="fas fa-link mr-1"></i>
             <a :href="url" target="_blank">
@@ -61,7 +61,7 @@
       <div class="m-2">
         <div class="mt-2 flex items-center mb-4">
           <div class="font-semibold mr-4">
-            Legend:
+            Legenda:
           </div>
           <div class="flex font-semibold items-center ml-2">
             <div class="mx-4 flex">
@@ -69,11 +69,11 @@
               <i class="fas fa-long-arrow-alt-down" style="color:#045a8d"></i>
             </div>
             <div class="mr-1 text-xs">
-              Near median
+              Blisko mediany
             </div>
             <img src="@/assets/resources/colorscale.png" class="h-6">
             <div class="ml-1 text-xs">
-              Far from median
+              Daleko od mediany
             </div>
           </div>
         </div>
@@ -90,7 +90,7 @@
                  :style="{ color: calculateArrowColor(name) }"></i>
               <i class="fas fa-equals ml-2"
                  v-if="getArrowDirection(name) === 'even'"></i>
-              <span class="ml-4">(Median: {{statistics[name]['50%']}})</span>
+              <span class="ml-4">(Mediana: {{statistics[name]['50%']}})</span>
             </div>
           </div>
         </div>
@@ -106,7 +106,7 @@ import 'load-awesome/css/ball-circus.css'
 import {nextTick} from "vue";
 import "vue3-circle-progress/dist/circle-progress.css";
 import CircleProgress from "vue3-circle-progress";
-import {RATING_WORDS} from "@/assets/resources/rating_words"
+import {RATING_WORDS} from "@/assets/utils/rating_words"
 
 export default {
   name: 'websiteAnalyzer',

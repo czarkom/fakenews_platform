@@ -13,24 +13,24 @@
         </div>
         <div class="w-2/3 flex justify-between">
           <router-link :to="{name: 'websiteAnalyzer'}" class="nav-link w-1/4">
-            <i class="fas fa-microscope mr-2"></i>Website analyser
+            <i class="fas fa-microscope mr-2"></i>Analiza strony
           </router-link>
           <div class="nav-link w-1/4 border-r-2 border-gray-500 border-l-2">
             <router-link :to="{name: 'dataOverview'}" class="w-full text-center">
-              <i class="fas fa-database mr-2"></i>Data overview
+              <i class="fas fa-database mr-2"></i>Przegląd danych
             </router-link>
           </div>
           <div class="nav-link w-1/4 border-r-2 border-gray-500">
             <router-link :to="{name: 'statistics'}" class="w-full text-center">
-              <i class="fas fa-calculator mr-2"></i>Statistics
+              <i class="fas fa-calculator mr-2"></i>Statystyki
             </router-link>
           </div>
           <router-link :to="{name: 'knowledgeBase'}" class="nav-link w-1/4">
-            <i class="fas fa-atlas mr-2"></i>Knowledge base
+            <i class="fas fa-atlas mr-2"></i>Baza wiedzy
           </router-link>
         </div>
       </div>
     </div>
-    <router-view class="relative z-20 mr-10 mb-10"/>
+    <router-view class="relative z-20"/>
   </div>
 </template>

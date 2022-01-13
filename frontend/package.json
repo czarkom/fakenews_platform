@@ -14,6 +14,7 @@
     "core-js": "^3.6.5",
     "load-awesome": "^1.1.0",
     "mathjs": "^10.0.2",
+    "swiper": "^6.7.5",
     "vue": "^3.0.0",
     "vue-audio-visual": "^2.3.0",
     "vue-router": "^4.0.12",
@@ -28,7 +29,9 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
+    "node-sass": "^4.14.1",
     "postcss": "^7.0.39",
+    "sass-loader": "^8.0.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
   },
   "eslintConfig": {
@@ -44,7 +47,7 @@
       "parser": "babel-eslint"
     },
     "rules": {
-        "no-unused-vars": "off"
+      "no-unused-vars": "off"
     }
   },
   "browserslist": [
