@@ -94,6 +94,11 @@
       </swiper-slide>
       <swiper-slide>
         <div class="h-40 flex justify-center items-center my-4">
+          <img class="h-32" :src="require('@/assets/resources/logos/tailwind.jpg')">
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <div class="h-40 flex justify-center items-center my-4">
           <img class="h-24" :src="require('@/assets/resources/logos/flask.jpg')">
         </div>
       </swiper-slide>
@@ -141,6 +146,30 @@
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen></iframe>
       </div>
+      <div class="flex w-full justify-center">
+        <div class="w-1/6"></div>
+        <div class="w-2/3 my-4">
+          <p class="text-justify">
+            Zebrane dane zostały zapisane w bazie danych, a następnie poddane procesowi klasyfikacji: binarnej i
+            kategorycznej (w skali od 1 do 5). W ten sposób utworzyliśmy zmienną niezależną. Klasyfikacja została
+            wykonana na podstawie
+            dwóch niezależnych źródeł, które w świecie nauki uważane są za zaufane i rzetelne. Są to
+            <a class="text-blue-700"
+               href="https://adfontesmedia.com/interactive-media-bias-chart/">Interactive Media Bias Chart</a> autorstwa
+            organizacji Ad Fontes Media (zaprezentowany poniżej) oraz
+            <a class="text-blue-700"
+               href="https://mediabiasfactcheck.com/">Media Bias/Fact Check</a>. Oba te źródła są szeroko cytowane w
+            analizach wiarygodności informacji w internecie, dlatego zdecydowaliśmy się na wsparcie ich danymi w celu
+            możliwie poprawnej i najmniej obciążonej stronniczością realizacji klasyfikacji. Tak przygotowane dane mogły
+            zostać przekazane jako zestaw treningowy do nauki sieci neuronowej.
+          </p>
+          <div class="flex justify-center my-4">
+            <img class="h-96" src="@/assets/resources/bias_chart.png">
+          </div>
+        </div>
+        <div class="w-1/6"></div>
+
+      </div>
     </div>
     <div class="my-8">
       <div class="my-4 flex justify-center text-2xl font-semibold">
@@ -171,6 +200,22 @@
     <div class="my-8">
       <div class="my-4 flex justify-center text-2xl font-semibold">
         Szczegółowe sprawozdanie z projektu (praca dyplomowa inżynierska)
+      </div>
+      <div class="flex w-full justify-center">
+        <div class="w-1/6"></div>
+        <div class="w-2/3 mb-4">
+          <p class="text-justify">
+            Pełen proces realizacji projektu to długie godziny spędzone nie tylko nad kodem, ale głównie nad analizami
+            otrzymywanych wyników. Wszelkie działania musiały być weryfikowane pod kątem poprawności działania, z czego
+            duża część z nich, ze względu na naturę zagadnienia i niezwykle skomplikowane architektury stron, które
+            rozwijają się wraz z rozwojem technologii budowy aplikacji webowych, musiała być weryfikowana ręcznie,
+            poprzez statyczną analizę np. wyselekcjonowanego ze strony internetowej tekstu. Dokładny opis podejmowanych
+            kroków, usprawnień i metod analizy danych został zawarty w pracy inżynierskiej, która jest efektem naszych
+            starań. Załączamy ją poniżej w celu umożliwienia zapoznania się ze szczegółami przeprowadzanych przez nas
+            analiz.
+          </p>
+        </div>
+        <div class="w-1/6"></div>
       </div>
       <div class="w-full justify-center flex font-semibold">
         <div class="flex justify-center">

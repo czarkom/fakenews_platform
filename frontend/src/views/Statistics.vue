@@ -2,7 +2,7 @@
   <div class="flex mx-0" v-if="statistics">
     <div class="w-1/3">
       <div class="text-xl text-gray-800 font-bold my-4 text-center">
-        Statistics for columns
+        Statystyki dla poszczególnych cech
       </div>
       <div style="max-height: 82vh" class="overflow-y-scroll">
         <div v-for="column_name in columnNamesToChoose"
@@ -31,7 +31,7 @@
       </div>
       <div class="flex flex-col w-full items-center">
         <div class="font-semibold text-lg my-2">
-          Violin plot
+          Wykres skrzypcowy
         </div>
         <img :src="require('@/assets/resources/violinplots/dist_violinplot_' + chosenColumn + '.png')"
              class="w-2/3 mb-4">

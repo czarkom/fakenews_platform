@@ -2,20 +2,20 @@
   <div class="ml-4">
     <div class="mx-4">
       <div class="text-xl text-gray-800 font-bold my-4">
-        Websites data overview
+        Przegląd danych z bazy
       </div>
       <div class="flex justify-center" v-if="websitesData">
         <div class="w-full border-2 rounded-md border-gray-400 text-center text-gray-700">
           <div class="bg-gray-200 rounded-t-md font-semibold text-gray-900 py-1 border-b-2 border-gray-400">
             <span>
-              Choose columns to display (max 4)
+              Wybierz kolumny do wyświetlenia (max 4)
             </span>
             <span>
               <i class="fas fa-filter"></i>
             </span>
           </div>
           <div class="flex items-center my-2">
-            <div class="mx-2 font-semibold">Chosen columns:</div>
+            <div class="mx-2 font-semibold">Wybierz kolumny:</div>
             <div v-for="(column, index) in chosenColumns" :key="index" class="font-semibold">
               <div class="text-sm mx-2 rounded-xl p-1 px-2 border-gray-800 border-2 shadow bg-gray-200">
                 {{ column }}
@@ -43,10 +43,10 @@
             <thead>
             <tr>
               <th>
-                No.
+                L.p.
               </th>
               <th>
-                <i class="fas fa-link mr-2"></i>Website url
+                <i class="fas fa-link mr-2"></i>Adres URL
               </th>
               <th v-for="(column, index) in chosenColumns" :key="index">
                 <div class="flex justify-center">
@@ -62,7 +62,7 @@
                 </div>
               </th>
               <th>
-                <i class="fas fa-info-circle mr-2"></i>View details
+                <i class="fas fa-info-circle mr-2"></i>Zobacz szczegóły
               </th>
             </tr>
             </thead>
@@ -80,7 +80,7 @@
               <td class="w-36">
                 <div class="border-2 border-gray-600 bg-gray-200 rounded-xl cursor-pointer shadow-xl shadow-inner"
                      @click="openWebsiteDataPreview(website)">
-                  Open<i class="ml-2 fas fa-envelope-open-text"></i>
+                  Otwórz<i class="ml-2 fas fa-envelope-open-text"></i>
                 </div>
               </td>
             </tr>
@@ -88,7 +88,7 @@
           </table>
         </div>
         <div class="m-8 p-12 rounded border-2 border-gray-500 text-gray-800" v-if="!websitesData.length">
-          No entries in databse
+          Brak wpisów w bazie danych
         </div>
       </template>
       <template v-else-if="loading">
@@ -98,19 +98,19 @@
               <i class="fas fa-spinner fa-pulse"></i>
             </div>
             <div class="ml-4">
-              Loading websites data
+              Ładowanie danych z bazy
             </div>
           </div>
         </div>
       </template>
       <div v-else-if="error" class="m-8 p-12 rounded border-2 border-red-500 text-red-500">
-        Error occured during fetching data
+        Wystąpił błąd podczas pobierania danych
       </div>
     </div>
     <div class="modal" v-if="websiteDataPreviewOpened">
       <div class="rounded-lg overflow-hidden w-3/4 bg-gray-300">
         <div class="p-4 font-semibold text-center text-lg flex justify-center">
-          Detailed data scrapped from
+          Dane zebrane ze strony
           <div class="hover:text-blue-700 italic ml-4 cursor-pointer">
             <i class="fas fa-link mr-1"></i>
             <a :href="previewWebsiteData.url" target="_blank">
@@ -120,7 +120,7 @@
         </div>
         <div class="mt-2 flex items-center mb-4 ml-4">
           <div class="font-semibold mr-4">
-            Legend:
+            Legenda:
           </div>
           <div class="flex font-semibold items-center ml-2">
             <div class="mx-4 flex">
@@ -128,11 +128,11 @@
               <i class="fas fa-long-arrow-alt-down" style="color:#045a8d"></i>
             </div>
             <div class="mr-1 text-xs">
-              Near median
+              Blisko mediany
             </div>
             <img src="@/assets/resources/colorscale.png" class="h-6">
             <div class="ml-1 text-xs">
-              Far from median
+              Daleko od mediany
             </div>
           </div>
         </div>
@@ -149,12 +149,12 @@
                  :style="{ color: calculateArrowColor(column) }"></i>
               <i class="fas fa-equals ml-2"
                  v-if="getArrowDirection(column) === 'even'"></i>
-              <span class="ml-4">(Median: {{statistics[column]['50%']}})</span>
+              <span class="ml-4">(Mediana: {{statistics[column]['50%']}})</span>
             </div>
           </div>
         </div>
         <div class="bg-gray-300 p-2 font-semibold text-right">
-          <div class="button button-danger" @click="closeMessagePreview">Close</div>
+          <div class="button button-danger" @click="closeMessagePreview">Zamknij</div>
         </div>
       </div>
     </div>
