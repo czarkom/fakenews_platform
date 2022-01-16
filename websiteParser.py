@@ -234,7 +234,8 @@ def get_text_related_data(scrapping_results_dictionary, soup):
     scrapping_results_dictionary['smart_words_count'] = smart_words_count
     scrapping_results_dictionary['words_to_avoid_count'] = words_to_avoid_count
 
-    scrapping_results_dictionary['exclamation_count'] = len(re.findall(r"(\b[A-Z]{4,}\b|[?!])", text_concat))
+    exclamations_list = re.findall(r"(\b[A-Z]{4,}\b|[?!])", text_concat)
+    scrapping_results_dictionary['exclamation_count'] = len(list(filter(check_words, exclamations_list)))
 
     scrapping_results_dictionary['text_longer_than_50_characters_count'] = len(
         text_from_html(soup, 50))
@@ -244,6 +245,10 @@ def get_text_related_data(scrapping_results_dictionary, soup):
         text_from_html(soup, 150))
     scrapping_results_dictionary['text_longer_than_200_characters_count'] = len(
         text_from_html(soup, 200))
+
+
+def check_words(word):
+    return word not in ['COVID', 'COVID-19']
 
 
 def get_websites_references_data(scrapping_results_dictionary, soup):
