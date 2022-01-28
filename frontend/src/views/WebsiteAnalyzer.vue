@@ -11,7 +11,7 @@
             style="width: 400px !important;"
             type="text"
             v-model="url"
-            placeholder="https://fronda.pl/farmazon"
+            placeholder="https://breakingnews.com/very-IMPORTANT-info"
             @keyup.enter="submit">
       </div>
       <div class="mx-2">

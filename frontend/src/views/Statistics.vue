@@ -6,17 +6,17 @@
       </div>
       <div style="max-height: 82vh" class="overflow-y-scroll">
         <div v-for="column_name in columnNamesToChoose"
-           :key="column_name"
-           class="py-4 border-gray-400 cursor-pointer"
-           :class="{ 'bg-gray-300': chosenColumn !== column_name,
+             :key="column_name"
+             class="py-4 border-gray-400 cursor-pointer"
+             :class="{ 'bg-gray-300': chosenColumn !== column_name,
             'font-semibold': chosenColumn === column_name}"
-           :style="[chosenColumn === column_name ? {'text-shadow': '0px 0px 3px #07653e'} : {}]"
-           @click="chooseColumn(column_name)">
-        <div
-            class="flex items-center justify-center text-semibold text-xl text-center">
-          {{ column_name }}
+             :style="[chosenColumn === column_name ? {'text-shadow': '0px 0px 3px #07653e'} : {}]"
+             @click="chooseColumn(column_name)">
+          <div
+              class="flex items-center justify-center text-semibold text-xl text-center">
+            {{ column_name }}
+          </div>
         </div>
-      </div>
       </div>
     </div>
     <div class="w-3/4 pt-8 overflow-y-scroll" style="max-height: 90vh" ref="data_section">
@@ -29,12 +29,21 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-col w-full items-center">
-        <div class="font-semibold text-lg my-2">
-          Wykres skrzypcowy
+      <div class="flex w-full items-center justify-center">
+        <div class="w-1/2 flex flex-col mx-16">
+          <div class="font-semibold text-lg my-2 text-center">
+            Wykres skrzypcowy<br>(wartości rzeczywiste)
+          </div>
+          <img :src="require('@/assets/resources/violinplots/dist_violinplot_' + chosenColumn + '.png')"
+               class="mb-4">
         </div>
-        <img :src="require('@/assets/resources/violinplots/dist_violinplot_' + chosenColumn + '.png')"
-             class="w-2/3 mb-4">
+        <div class="w-1/2 flex flex-col mx-16 text-center">
+          <div class="font-semibold text-lg my-2">
+            Wykres skrzypcowy przy kategoryzacji binarnej<br>(wartości normalizowane)
+          </div>
+          <img :src="require('@/assets/resources/violins_split/dist_violinplot_split_' + chosenColumn + '.png')"
+               class="mb-4">
+        </div>
       </div>
     </div>
   </div>
@@ -83,13 +92,13 @@ export default {
             return obj;
           }, {});
     },
-    columnNamesToChoose(){
-      const notAllowed = ['categorical_rating','binary_rating']
+    columnNamesToChoose() {
+      const notAllowed = ['categorical_rating', 'binary_rating']
       return Object.keys(this.statistics).filter(k => !notAllowed.includes(k))
     }
   },
   watch: {
-    chosenColumn(){
+    chosenColumn() {
       this.$refs.data_section.scrollTo({top: 0, behavior: 'smooth'})
     }
   }
